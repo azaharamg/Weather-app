@@ -45,14 +45,44 @@ function App() {
 		return `${day} ${date} ${month} ${year}`;
 	};
 
+	const decideBackground = () => {
+		if (typeof weather.main === 'undefined') {
+			return '';
+		}
+		switch (weather.weather[0].main) {
+			case 'Clear' || 'Sunny':
+				return 'app-warm';
+			case 'Rain':
+				return 'app-rain';
+			case 'Snow':
+				return 'app-cold';
+			case 'Clouds' || 'Mist' || 'Fog':
+				return 'app-fog';
+			default:
+				return weather.main.temp > 16 ? 'app-warm' : 'app-cold';
+		}
+	};
+
+	const outfitAdvice = () => {
+		if (weather.weather[0].main === 'Rain') {
+			return 'Do not forget your umbrella and your water boots';
+		} else if (weather.main.temp < 6) {
+			return 'You should wear warm clothes: coat, wool hat and gloves';
+		} else if (weather.main.temp > 6 && weather.main.temp < 20) {
+			return 'You should wear a coat and warm clothes';
+		} else {
+			return 'You should wear Spring clothing';
+		}
+	};
+
 	return (
-		<div className={typeof weather.main != 'undefined' ? (weather.main.temp > 16 ? 'app-warm' : 'app') : 'app'}>
-			<main className='main-container'>
+		<div className={`container ${decideBackground()}`}>
+			<main className='main'>
 				<div className='search-box'>
 					<input
 						type='text'
 						className='search-bar'
-						placeholder='Search...'
+						placeholder='Search current weather in...'
 						value={query}
 						onKeyPress={search}
 						onChange={event => setQuery(event.target.value)}
@@ -72,9 +102,12 @@ function App() {
 								<div className='wind'>Wind {weather.wind.speed} m/s</div>
 							</div>
 						</div>
+						<div className='advice-box'>
+							<div className='oufit'>{outfitAdvice()}</div>
+						</div>
 					</div>
 				) : (
-					''
+					<h1 className='main-title'>What Should I Wear Today ?</h1>
 				)}
 			</main>
 		</div>
