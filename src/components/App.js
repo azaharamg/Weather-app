@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../stylesheet/app.css';
 
 const api = {
-	key: 'your-apiKey',
-	base: 'api.openweathermap.org/data/2.5/'
+	key: 'your-api-key',
+	base: 'https://api.openweathermap.org/data/2.5/'
 };
 
 function App() {
+	const [query, setQuery] = useState('');
+	const [weather, setWeather] = useState({});
+
+	const search = event => {
+		if (event.key === 'Enter') {
+			fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+				.then(response => response.json())
+				.then(result => {
+					setQuery('');
+					setWeather(result);
+				});
+		}
+	};
+
 	const dateBuilder = currentDay => {
 		let months = [
 			'January',
@@ -32,19 +46,36 @@ function App() {
 	};
 
 	return (
-		<div className='app'>
+		<div className={typeof weather.main != 'undefined' ? (weather.main.temp > 16 ? 'app-warm' : 'app') : 'app'}>
 			<main className='main-container'>
-				<form className='search-box'>
-					<input type='text' className='search-bar' placeholder='Search...' />
-				</form>
-				<div className='location-box'>
-					<div className='location'>Madrid</div>
-					<div className='date'>{dateBuilder(new Date())}</div>
+				<div className='search-box'>
+					<input
+						type='text'
+						className='search-bar'
+						placeholder='Search...'
+						value={query}
+						onKeyPress={search}
+						onChange={event => setQuery(event.target.value)}
+					/>
 				</div>
-				<div className='weather-box'>
-					<div className='temp'>15ºC</div>
-					<div className='weather'>Sunny</div>
-				</div>
+				{typeof weather.main != 'undefined' ? (
+					<div>
+						<div className='location-box'>
+							<div className='location'>{weather.name}</div>
+							<div className='date'>{dateBuilder(new Date())}</div>
+						</div>
+						<div className='weather-box'>
+							<div className='temp'>{Math.round(weather.main.temp)}ºC</div>
+							<div className='weather'>{weather.weather[0].main}</div>
+							<div className='weather-details'>
+								<div className='humidity'>Humidity {weather.main.humidity} %</div>
+								<div className='wind'>Wind {weather.wind.speed} m/s</div>
+							</div>
+						</div>
+					</div>
+				) : (
+					''
+				)}
 			</main>
 		</div>
 	);
