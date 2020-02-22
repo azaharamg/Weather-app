@@ -4,7 +4,7 @@ Web application developed in React to check what's the weather like anywhere in 
 
 ## Description
 
-Users can write the localization (city name, post codes, ...) to check the weather there. Then the application will do a request to [API OpenWeatherMap](https://openweathermap.org/api) to fetch the data and finally show it to the user
+Users can write the localization (city name, post code, country or even by geographic coordinates) to check the weather there. Then the application will do a request to [API OpenWeatherMap](https://openweathermap.org/api) to fetch the data and finally show it to the user
 
 The application gives information about the date, temperature, humidity, and wind. Also, according to meteorological conditions, the background of the app changes and the app gives advice about what kind of outfit is better for the current weather
 
