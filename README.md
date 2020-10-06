@@ -13,7 +13,7 @@ The application gives information about the date, temperature, humidity, and win
 -   ReactJS application, implemented with Hooks
 -   Requests to OpenWeatherMap REST API
 -   Layout with pure CSS
--   To deploy the project to Heroku
+-   To deploy the project to Netlify
 
 ## Installation
 
